@@ -496,7 +496,7 @@ class AKSPreviewManagedClusterContext(AKSManagedClusterContext):
         # --network-dataplane was introduced with API v20230202preview to replace --enable-cilium-dataplane.
         # Keep both for backwards compatibility, but validate that the user sets only one of them.
         if self.get_network_dataplane() is not None:
-            raise MutallyExclusiveArgumentError(
+            raise MutuallyExclusiveArgumentError(
                 "Cannot specify --enable-cilium-dataplane and "
                 "--network-dataplane at the same time"
             )
