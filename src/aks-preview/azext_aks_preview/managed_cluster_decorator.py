@@ -482,11 +482,25 @@ class AKSPreviewManagedClusterContext(AKSManagedClusterContext):
         # this parameter does not need validation
         return network_plugin_mode
 
+    def get_network_dataplane(self) -> Union[str, None]:
+        """Get the value of network_dataplane.
+
+        :return: str or None
+        """
+        return self.raw_param.get("network_dataplane")
+
     def get_enable_cilium_dataplane(self) -> bool:
         """Get the value of enable_cilium_dataplane
 
         :return: bool
         """
+        # --network-dataplane was introduced with API v20230202preview to replace --enable-cilium-dataplane.
+        # Keep both for backwards compatibility, but validate that the user specifies only one of them.
+        if self.get_network_dataplane() is not None:
+            raise MutallyExclusiveArgumentError(
+                "Cannot specify --enable-cilium-dataplane and "
+                "--network-dataplane at the same time"
+            )
         return bool(self.raw_param.get('enable_cilium_dataplane'))
 
     def get_load_balancer_managed_outbound_ipv6_count(self) -> Union[int, None]:
