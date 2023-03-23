@@ -45,7 +45,6 @@ from knack.log import get_logger
 from knack.prompting import prompt_y_n
 
 from azext_aks_preview._consts import (
-    CONST_EBPF_DATAPLANE_CILIUM,
     CONST_LOAD_BALANCER_SKU_BASIC,
     CONST_NETWORK_PLUGIN_AZURE,
     CONST_NETWORK_PLUGIN_MODE_OVERLAY,
