@@ -493,13 +493,6 @@ class AKSPreviewManagedClusterContext(AKSManagedClusterContext):
 
         :return: bool
         """
-        # --network-dataplane was introduced with API v20230202preview to replace --enable-cilium-dataplane.
-        # Keep both for backwards compatibility, but validate that the user sets only one of them.
-        if self.get_network_dataplane() is not None:
-            raise MutuallyExclusiveArgumentError(
-                "Cannot specify --enable-cilium-dataplane and "
-                "--network-dataplane at the same time"
-            )
         return bool(self.raw_param.get('enable_cilium_dataplane'))
 
     def get_load_balancer_managed_outbound_ipv6_count(self) -> Union[int, None]:
@@ -1999,6 +1992,13 @@ class AKSPreviewManagedClusterCreateDecorator(AKSManagedClusterCreateDecorator):
         network_profile.network_plugin_mode = self.context.get_network_plugin_mode()
 
         if self.context.get_enable_cilium_dataplane():
+            # --network-dataplane was introduced with API v20230202preview to replace --enable-cilium-dataplane.
+            # Keep both for backwards compatibility, but validate that the user sets only one of them.
+            if self.context.get_network_dataplane() is not None:
+                raise MutuallyExclusiveArgumentError(
+                    "Cannot specify --enable-cilium-dataplane and "
+                    "--network-dataplane at the same time"
+                )
             network_profile.network_dataplane = CONST_NETWORK_DATAPLANE_CILIUM
         else:
             network_profile.network_dataplane = self.context.get_network_dataplane()
