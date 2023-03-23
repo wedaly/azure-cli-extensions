@@ -700,7 +700,7 @@ class AKSPreviewManagedClusterContextTestCase(unittest.TestCase):
             self.models,
             decorator_mode=DecoratorMode.CREATE,
         )
-        self.assertEqual(ctx_1.get_network_dataplane(), "azure")
+        self.assertEqual(ctx_3.get_network_dataplane(), "azure")
 
     def test_mc_get_enable_cilium_dataplane(self):
         # Default, not set.
